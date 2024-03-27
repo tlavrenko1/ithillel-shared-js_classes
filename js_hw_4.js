@@ -44,6 +44,9 @@ console.log(customIsNaN('-12'), isNaN('-12'));
 Відсоток парних до не парних: */
 
 function checkProbabilityTheory(count) {
+    if (count <= 0) {
+        throw Error("Valur should be higher than 0");
+    }
     const min = 100;
     const max = 1000;
     const randomNumbers = [];
@@ -64,8 +67,8 @@ function countOddsNumbers(randomNumbers) {
         } else {
             oddCount++;
         }
-
     }
+
     return {
         even: evenCount,
         odd: oddCount
@@ -74,19 +77,8 @@ function countOddsNumbers(randomNumbers) {
 
 function checkCorrelation(data) {
     const totalCount = data.even + data.odd;
-    let oddCorrelation;
-    let evenCorrelation;
-
-    if (data.even === 0) {
-        oddCorrelation = 100;
-        evenCorrelation = 0;
-    } else if (data.odd === 0) {
-        oddCorrelation = 0;
-        evenCorrelation = 100;
-    } else {
-        oddCorrelation = (data.odd * 100) / totalCount;
-        evenCorrelation = 100 - oddCorrelation;
-    }
+    let oddCorrelation = (data.odd * 100) / totalCount;
+    let evenCorrelation = 100 - oddCorrelation;
 
     return {
         oddCorrelation: Math.round(oddCorrelation),
@@ -94,13 +86,11 @@ function checkCorrelation(data) {
     };
 }
 
-randomNumbers = checkProbabilityTheory(10);
+randomNumbers = checkProbabilityTheory(8);
 const count = countOddsNumbers(randomNumbers);
+const correlations = checkCorrelation(count);
 console.log('Random numbers:', randomNumbers);
 console.log('Even count:', count.even);
 console.log('Odd count:', count.odd);
-
-const correlations = checkCorrelation(count);
-
 console.log('Odd correlation:', correlations.oddCorrelation + "%");
 console.log('Even correlation:', correlations.evenCorrelation + "%");
