@@ -141,15 +141,15 @@ function integersSum(str) {
 
         if (str[i] === '-' && numberStr.length === 0) {
             numberStr += str[i];
-        } else if (isNaN(str[i]) && numberStr.length !== 0 && str[i - 1] !== '-') {
+        } else if (isNaN(parseInt(str[i])) && numberStr.length !== 0 && str[i - 1] !== '-') {
             result += +numberStr;
             numberStr = '';
             if (str[i] === '-') {
                 numberStr += str[i];
             }
-        } else if (!isNaN(str[i]) && str[i]) {
+        } else if (!isNaN(parseInt(str[i])) && str[i]) {
             numberStr += str[i];
-        } else if (isNaN(str[i]) && numberStr === '-' && str[i] !== '-') {
+        } else if (isNaN(parseInt(str[i])) && numberStr === '-' && str[i] !== '-') {
             numberStr = '';
         }
     }
