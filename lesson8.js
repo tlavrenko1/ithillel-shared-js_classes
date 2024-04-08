@@ -8,7 +8,7 @@
 ці "дочірні компанії" також можуть стати постачальниками цього рішення,
  і в цьому випадку вони вже будуть "внучатами компанії" (subSubCompany), і так далі і далі.
  Вам необхідно написати функцію findValueByKey(companyName), яка буде приймати значення у вигляді 
- companyName та надавати інформацію про цю subCompany.*/
+ companyName та надавати інформацію про цю subCompany.
 
 const company = {
     name: 'Велика Компанія',
@@ -49,13 +49,14 @@ const company = {
     ]
 };
 
-function findValueByKey(company,companyName) {
-    if (company.name === companyName) {
-        return company;
+function findValueByKey(companyName) {
+    if (this.name === companyName) {
+        return this;
     }
-    if (company.clients) {
-        for (const client of company.clients) {
-            const foundChildCompany = findValueByKey(client, companyName)
+    let subCompanies = this.clients || this.partners;
+    if (subCompanies) {
+        for (const company of subCompanies) {
+            const foundChildCompany = findValueByKey.call(company, companyName)
             if (foundChildCompany) {
                 return foundChildCompany;
             }
@@ -63,11 +64,30 @@ function findValueByKey(company,companyName) {
     }
     return null;
 }
-const searchedCompanyDetails = findValueByKey(company,'Клієнт 1.2');
+
+const searchedCompanyDetails = findValueByKey.call(company, 'Клієнт 1.2.3.677');
 
 function printCompanyDetails(searchedCompanyDetails) {
+    if (!searchedCompanyDetails) {
+        console.log('This company was\'t found!');
+        return;
+    }
     Object.entries(searchedCompanyDetails).forEach(keyValuePair => {
-        console.log("  ", ...keyValuePair)
+        if (keyValuePair[0] !== 'clients' && keyValuePair[0] !== 'partners') {
+            console.log("  ", ...keyValuePair)
+        }
     })
 }
-printCompanyDetails(searchedCompanyDetails);
+printCompanyDetails(searchedCompanyDetails);*/
+
+/*ДЗ.2 Робота з обʼєктом
+Створіть об'єкт з щонайменше трьома властивостями (намагайтесь виявити фантазію). Напишіть метод getInfo(), який виводитиме всі властивості об'єкта у вигляді пар "ключ: значення". Зверніть увагу: метод повинен працювати навіть після додавання нових властивостей до об'єкта.
+
+Наприклад так:
+
+obj.getInfo(); // Правильна інформація про об'єкт
+obj.newProperty = 'Нова властивість!'; // Додали властивість до об'єкта
+obj.getInfo(); // Виводить всі властивості, включаючи щойно додану.
+Умови виконання ДЗ.2 
+
+Не використовувати методи keys, values, entries*/
