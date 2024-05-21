@@ -32,8 +32,7 @@ function get(url){
         .catch(error => {
             console.error('There is a problem:', error);
         });
-
-}
+    }
 
 getToDoFromServerInPromise()
     .then(todo => {
@@ -75,8 +74,8 @@ getToDoFromServerInPromise()
  
  main();
 
-/*Task_3: 
-import fetch from 'node-fetch';*/
+//Task_3: 
+
 async function getUserWithAwait() {
     try {
         const response = await fetch('https://jsonplaceholder.typicode.com/users/1');
@@ -110,3 +109,70 @@ async function main() {
 main(); 
 
 // Task_4
+
+class UserService {
+    async fetchUser() {
+        try {
+            const response = await fetch('https://jsonplaceholder.typicode.com/users/1');
+            if (!response.ok) {
+                throw new Error('There is an error:' + response.statusText);
+            }
+            const result = await response.json();
+            console.log('Fetched successfully:', result);
+            return result;
+        } catch (error) {
+            console.error('There is a problem:', error);
+        }
+    }
+}
+
+class UserOperations {
+    constructor(userService) {
+        this.userService = userService;
+    }
+
+    async fetchAllUsers() {
+        try {
+            const allUsers = await Promise.all([
+                this.userService.fetchUser(),
+                this.userService.fetchUser(),
+                this.userService.fetchUser()
+            ]);
+            console.log('All users fetched:', allUsers);
+            return allUsers;
+        } catch (error) {
+            console.error('Error fetching all users:', error);
+            throw error;
+        }
+    }
+
+    async fetchRaceUser() {
+        try {
+            const raceUser = await Promise.race([
+                this.userService.fetchUser(),
+                this.userService.fetchUser(),
+                this.userService.fetchUser()
+            ]);
+            console.log('First user fetched:', raceUser);
+            return raceUser;
+        } catch (error) {
+            console.error('Error fetching race user:', error);
+            throw error;
+        }
+    }
+}
+
+const userService = new UserService();
+const userOperations = new UserOperations(userService);
+
+userOperations.fetchAllUsers().then(allUsers => {
+    console.log('Fetched all users with Promise.all:', allUsers);
+}).catch(error => {
+    console.error('Error in Promise.all:', error);
+});
+
+userOperations.fetchRaceUser().then(raceUser => {
+    console.log('Fetched first user with Promise.race:', raceUser);
+}).catch(error => {
+    console.error('Error in Promise.race:', error);
+});
